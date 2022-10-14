@@ -1,6 +1,6 @@
 enum FilterField{
   
-  EQUAL,
+  EQUALS,
   CONTAINS,
  BETWEEN
 
