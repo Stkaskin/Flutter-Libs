@@ -1,7 +1,11 @@
+// ignore_for_file: unnecessary_this
+
+import 'package:flutter/foundation.dart';
 import 'package:serviceweb/webservice/Lazy/Filter.dart';
 import 'package:serviceweb/webservice/Lazy/Sort.dart';
 import 'package:serviceweb/webservice/LazyProperty/SortField.dart';
 
+// ignore_for_file: curly_braces_in_flow_control_structures
 class LazyMap {
   Map<String, Filter>? filters;
   String tableName;
@@ -9,10 +13,12 @@ class LazyMap {
   int? count;
   int? displaycount;
   int? pageNumber;
+  String? primarykeyname;
+  Map<String, dynamic> object =Map();
   LazyMap(this.tableName) {
-    displaycount=1;
-    count=10;
-    pageNumber=0;
+    displaycount = 1;
+    count = 10;
+    pageNumber = 0;
     this.sorter = Sort("", SortField.UNSORTED);
     this.filters = Map();
   }
@@ -44,13 +50,22 @@ class LazyMap {
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> data = new Map<String, dynamic>();
-    data["\"tablename\""] = "\"" + this.tableName.toString() + "\"";
-    data["\"filterdata\""] = getSyntax();
-    data["\"sortdata\""] = sortToJson();
-    data["\"count\""] = "\"" + count.toString() + "\"";
-    data["\"pagenumber\""] = "\"" + pageNumber.toString() + "\"";
-    data["\"displaycount\""] = "\"" + displaycount.toString() + "\"";
-
+    if (tableName.isNotEmpty)
+      data["\"tablename\""] = "\"" + this.tableName.toString() + "\"";
+    else 
+      return Map();
+    if (filters != null && filters!.isNotEmpty)
+      data["\"filterdata\""] = getSyntax();
+    if (sorter != null) data["\"sortdata\""] = sortToJson();
+    if (count != null) data["\"count\""] = "\"" + count.toString() + "\"";
+    if (pageNumber != null)
+      data["\"pagenumber\""] = "\"" + pageNumber.toString() + "\"";
+    if (displaycount != null)
+      data["\"displaycount\""] = "\"" + displaycount.toString() + "\"";
+    if (object.isNotEmpty)
+      data["\"object\""] = object.toString();
+    if (primarykeyname != null)
+      data["\"primarykeyname\""] = "\"" + primarykeyname! + "\"";
     return data;
   }
 
@@ -70,6 +85,7 @@ class property {
     Map<String, dynamic> data = new Map<String, dynamic>();
     data["\"propname\""] = "\"" + propname.toString() + "\"";
     data["\"values\""] = value;
+
     return data;
   }
 }
